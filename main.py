@@ -5,6 +5,9 @@ from typing import Optional
 
 app = FastAPI()
 
+my_posts = [{"id": 1, "title": "Post 1", "content": "Content 1", "published": True, "rating": 3},
+            {"id": 2, "title": "Post 2", "content": "Content 2", "published": True, "rating": 4}]
+
 
 class Post(BaseModel):
     title: str
@@ -20,10 +23,11 @@ async def root():
 
 @app.get('/posts')
 async def get_posts():
-    return {"posts": "This is supposed to be a list of posts."}
+    return {"posts": my_posts}
 
 
-@app.post('/createpost')
+@app.post('/posts')
 async def create_post(post: Post):
-    # print(post)
-    return {"new post": f"Title: {post.title} Content: {post.content} Published: {post.published} Rating: {post.rating}"}
+    my_posts.append({"id": len(my_posts)+1, "title": post.title,
+                    "content": post.content, "published": post.published, "rating": post.rating})
+    return {"posts": my_posts}
