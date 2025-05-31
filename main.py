@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
@@ -26,7 +26,7 @@ async def get_posts():
     return {"posts": my_posts}
 
 
-@app.post('/posts')
+@app.post('/posts', status_code=status.HTTP_201_CREATED)
 async def create_post(post: Post):
     my_posts.append({"id": len(my_posts)+1, "title": post.title,
                     "content": post.content, "published": post.published, "rating": post.rating})
